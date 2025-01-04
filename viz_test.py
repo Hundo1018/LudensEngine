@@ -3,7 +3,8 @@ import pygfx as gfx
 import wgpu
 import wgpu.gui.auto
 from wgpu.gui.auto import run
-print( wgpu.gui.auto.__file__)
+import wgpu.gui.base
+import wgpu.gui.glfw
 
 # 創建基本場景要素
 canvas = wgpu.gui.auto.WgpuCanvas()
@@ -20,14 +21,14 @@ controller = gfx.OrbitController(camera, register_events=renderer)
 
 # 方塊
 box_geometry1 = gfx.box_geometry(20, 20, 20)
-box_material1 = gfx.MeshBasicMaterial(color=(1.0, 0.0, 0.0, 1.0))  # 红色
+box_material1 = gfx.MeshBasicMaterial(color=(1.0, 0.0, 0.0, 1.0))  # 紅色
 box1 = gfx.Mesh(box_geometry1, box_material1)
 box1.local.position = (20, 0, 0)
 scene.add(box1)
 
 # 方塊2
 box_geometry2 = gfx.box_geometry(20, 20, 20)
-box_material2 = gfx.MeshBasicMaterial(color=(0.0, 0.0, 1.0, 1.0))  # 蓝色
+box_material2 = gfx.MeshBasicMaterial(color=(0.0, 0.0, 1.0, 1.0))  # 藍色
 box2 = gfx.Mesh(box_geometry2, box_material2)
 box2.local.position = (-20, 0, 0)
 scene.add(box2)
@@ -42,8 +43,10 @@ light.local.position = (5, 5, 5)
 scene.add(light)
 
 # 渲染循環
-def loop():
+while input() != "q":
+    # 著色器上色
     renderer.render(scene, camera)
-renderer.request_draw(loop)
-# 等待關閉
-run()
+    # 通知更新(實際渲染到畫布上)
+    canvas._draw_frame_and_present()
+    # 移動邏輯
+    box1.local.x = box1.local.x + 1

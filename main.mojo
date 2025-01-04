@@ -1,13 +1,10 @@
 from python import Python, PythonObject
 
 
-def main() :
+def main():
     var gfx = Python.import_module("pygfx")
-    # Python.add_to_path('/home/hundo/projects/ludens-engine/.magic/envs/default/lib/python3.12/site-packages/wgpu/gui')
     var wgpu = Python.import_module("wgpu")
-    var gui = Python.import_module("wgpu.gui")
-    var auto = Python.import_module("wgpu.gui.auto")
-    var run = wgpu.gui.auto
+    Python.import_module("wgpu.gui.auto")
 
     # 創建基本場景要素
     var canvas = wgpu.gui.auto.WgpuCanvas()
@@ -44,11 +41,12 @@ def main() :
     var light = gfx.PointLight(color=(1.0, 1.0, 1.0), intensity=2.0)
     light.local.position = (5, 5, 5)
     scene.add(light)
+
     # 渲染循環
-    # def loop() :
-    #     renderer.render(scene, camera)
-    # renderer.request_draw(loop)
-
-    # run()
-
-    print('done')
+    while input() != "q":
+        # 著色器上色
+        renderer.render(scene, camera)
+        # 通知更新(實際渲染到畫布上)
+        canvas._draw_frame_and_present()
+        # 移動邏輯
+        box1.local.x = box1.local.x + 1
