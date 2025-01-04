@@ -8,4 +8,8 @@ version = "0.1.0"
 [tasks]
 
 [dependencies]
-max = ">=24.5.0,<25"
+max = ">=24.6.0,<25"
+pygfx = ">=0.6.0,<0.7"
+
+[pypi-dependencies]
+glfw = ">=2.8.0, <3"
