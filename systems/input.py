@@ -1,10 +1,11 @@
 import time
+import glfw
 import pygfx as gfx
 import wgpu
 import wgpu.gui.auto
-from wgpu.gui.auto import run
 import wgpu.gui.base
 import wgpu.gui.glfw
+
 
 # 創建基本場景要素
 canvas = wgpu.gui.auto.WgpuCanvas()
@@ -43,10 +44,14 @@ light.local.position = (5, 5, 5)
 scene.add(light)
 
 # 渲染循環
-while input() != "q":
+while True:
+    print(glfw.get_cursor_pos(canvas._window))
+
+    # 移動邏輯
+    box1.local.euler_x += 0.1
     # 著色器上色
     renderer.render(scene, camera)
     # 通知更新(實際渲染到畫布上)
     canvas._draw_frame_and_present()
-    # 移動邏輯
-    box1.local.x = box1.local.x + 1
+
+    time.sleep(0.016)
