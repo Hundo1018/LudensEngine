@@ -5,13 +5,44 @@
     "version": "0.2.0",
     "configurations": [
         {
-            "name": "Python Debugger: Current File",
-            "type": "debugpy",
+            "type": "mojo-lldb",
             "request": "launch",
-            "program": "${file}",
-            "console": "integratedTerminal",
-            "justMyCode": false,
-
+            "name": "Mojo: Debug current Mojo file",
+            "description": "Launch and debug the Mojo file that is active on the editor when the debug session starts.",
+            "mojoFile": "${file}",
+            "args": [],
+            "env": [],
+            "cwd": "${workspaceFolder}",
+            "runInTerminal": false
+        },
+        {
+            "type": "mojo-lldb",
+            "request": "launch",
+            "name": "Mojo: Debug Mojo file",
+            "description": "Launch and debug a Mojo file given its path.",
+            "mojoFile": "${workspaceFolder}/main.mojo",
+            "args": [],
+            "env": [],
+            "cwd": "${workspaceFolder}",
+            "runInTerminal": false
+        },
+        {
+            "type": "mojo-lldb",
+            "request": "launch",
+            "name": "Mojo: Debug binary",
+            "description": "Launch and debug a precompiled binary given its path.",
+            "program": "${workspaceFolder}/<your_binary>",
+            "args": [],
+            "env": [],
+            "cwd": "${workspaceFolder}",
+            "runInTerminal": false
+        },
+        {
+            "type": "mojo-lldb",
+            "request": "attach",
+            "name": "Mojo: Attach to process",
+            "description": "Search for a process to attach the debugger to.",
+            "pid": "${command:pickProcessToAttach}"
         }
     ]
 }
