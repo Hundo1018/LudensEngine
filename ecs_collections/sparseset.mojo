@@ -20,9 +20,10 @@ trait EcsSet:
         ...
 
 
+@value
 struct SparseSet[fixed_size: Int](Sized, Boolable):
     alias _fixed_size: Int = fixed_size
-    var _sparse: InlineList[Int, Self._fixed_size]
+    var _sparse: List[Int]
     """storage the index of dense array"""
     var _dense: List[Int]
     """storage the keys"""
@@ -30,9 +31,13 @@ struct SparseSet[fixed_size: Int](Sized, Boolable):
     """for __iter__ __next__ using"""
 
     fn __init__(mut self, *keys: Int) -> None:
-        self._sparse = InlineList[Int, self._fixed_size]()
+        self._sparse = List[Int]()
         self._dense = List[Int]()
-        self._current = -1
+        self._current = 0
+        for _ in range(self._fixed_size):
+            self._sparse.append(-1)
+        for i in keys:
+            self.add(i)
 
     fn __len__(self) -> Int:
         return len(self._dense)
@@ -42,22 +47,22 @@ struct SparseSet[fixed_size: Int](Sized, Boolable):
 
     fn add(mut self, key: Int) -> None:
         """Add a key into set."""
-        if self.contains(key):
+        if key in self:
             return
         """makesure the number does not exist."""
         self._dense.append(key)
         """update dense array"""
-        self._sparse[key] = len(self._dense)
+        self._sparse[key] = len(self._dense) - 1
         """update sparse array"""
 
-    fn contains(self, key: Int) -> Bool:
+    fn __contains__(self, key: Int) -> Bool:
         """Check the key whether or not in the set."""
         index = self._sparse[key]
         return index >= 0 and self._dense[index] == key
 
     fn remove(mut self, key: Int):
         """Remove the key from the set."""
-        if not self.contains(key):
+        if key not in self:
             return
         index = self._sparse[key]
         self._sparse[key] = -1
@@ -67,24 +72,13 @@ struct SparseSet[fixed_size: Int](Sized, Boolable):
         _ = self._dense.pop()
         """remove the last index of dense"""
 
-    fn __copyinit__(out self, existing: Self):
-        """Implement for __iter__."""
-        self = Self()
-        for i in self._dense:
-            self.add(i[])
-
-    fn __iter__(self) -> Self:
+    fn __iter__(mut self) -> Self:
+        self._current = 0
         return self
 
     fn __next__(mut self) -> Int:
         self._current += 1
-        return self._dense[self._current]
+        return self._dense[self._current - 1]
 
-    fn __has_next__(self) -> Bool:
-        return True
-
-
-fn main():
-    var my_set = SparseSet[4](1, 2, 3, 4)
-    for element in my_set:
-        print(element)
+    fn __has_next__(mut self) -> Bool:
+        return self._current < len(self._dense)
