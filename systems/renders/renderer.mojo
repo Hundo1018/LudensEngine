@@ -1,5 +1,6 @@
 from python import Python, PythonObject
 
+# Maybe will transfer to SDL2
 
 def main():
     var gfx = Python.import_module("pygfx")

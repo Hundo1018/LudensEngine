@@ -1,5 +1,5 @@
 [project]
-channels = ["conda-forge", "https://conda.modular.com/max"]
+channels = ["conda-forge", "https://conda.modular.com/max-nightly"]
 description = "Add a short description here"
 name = "ludens-engine"
 platforms = ["linux-64"]
@@ -8,8 +8,8 @@ version = "0.1.0"
 [tasks]
 
 [dependencies]
-max = ">=24.6.0,<25"
-pygfx = ">=0.6.0,<0.7"
+max = ">=25.1.0.dev2025011405,<26"
+pygfx = ">=0.7.0,<0.8"
 
 [pypi-dependencies]
 glfw = ">=2.8.0, <3"
