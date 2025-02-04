@@ -1,19 +1,6 @@
 from collections import *
 
 
-trait EcsSet:
-    """Set for ECS."""
-
-    fn __init__(mut self, *values: Int) -> None:
-        ...
-
-    fn add(self, value: Int) -> None:
-        ...
-
-    fn remove(self, value: Int):
-        ...
-
-
 @value
 struct SparseSet[fixed_size: Int](Sized, Boolable):
     alias _fixed_size: Int = fixed_size
