@@ -2,7 +2,7 @@ from python import Python, PythonObject
 
 # Maybe will transfer to SDL2
 
-def main():
+def test():
     var gfx = Python.import_module("pygfx")
     var wgpu = Python.import_module("wgpu")
     Python.import_module("wgpu.Fgui.auto")
