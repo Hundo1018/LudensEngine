@@ -1,39 +1,25 @@
-from collections import *
-
-
-trait EcsSet:
-    """Set for ECS."""
-
-    fn __init__(mut self, *values: Int) -> None:
-        ...
-
-    fn add(self, value: Int) -> None:
-        ...
-
-    fn contains(self, value: Int) -> Bool:
-        ...
-
-    fn iter(self, value: Int):
-        ...
-
-    fn remove(self, value: Int):
-        ...
-
-
-struct SparseSet[fixed_size: Int](Sized, Boolable):
+from collections import InlineList
+struct SparseSet[fixed_size: Int,//,*keys:Int](Sized, Boolable):
     alias _fixed_size: Int = fixed_size
-    var _sparse: InlineList[Int, Self._fixed_size]
+    alias _list  = VariadicList(keys)
+
+    var _sparse: InlineList[Int,Self._fixed_size]
     """storage the index of dense array"""
     var _dense: List[Int]
     """storage the keys"""
+
     var _current: Int
     """for __iter__ __next__ using"""
 
-    fn __init__(mut self, *keys: Int) -> None:
-        self._sparse = InlineList[Int, self._fixed_size]()
+    fn __init__(mut self) -> None:
+        self._sparse = InlineList[Int, Self._fixed_size]()
         self._dense = List[Int]()
-        self._current = -1
 
+        self._current = -1
+        for i in range(Self._fixed_size):
+            self._sparse[i] = -1
+        for i in range(len(Self._list)):
+            self.add(self._list[i])
     fn __len__(self) -> Int:
         return len(self._dense)
 
@@ -45,10 +31,10 @@ struct SparseSet[fixed_size: Int](Sized, Boolable):
         if self.contains(key):
             return
         """makesure the number does not exist."""
-        self._dense.append(key)
-        """update dense array"""
         self._sparse[key] = len(self._dense)
         """update sparse array"""
+        self._dense.append(key)
+        """update dense array"""
 
     fn contains(self, key: Int) -> Bool:
         """Check the key whether or not in the set."""
@@ -81,10 +67,10 @@ struct SparseSet[fixed_size: Int](Sized, Boolable):
         return self._dense[self._current]
 
     fn __has_next__(self) -> Bool:
-        return True
+        return self._current < len(self._dense) - 1
 
 
 fn main():
-    var my_set = SparseSet[4](1, 2, 3, 4)
+    var my_set = SparseSet[fixed_size=4,2,1]()
     for element in my_set:
         print(element)
